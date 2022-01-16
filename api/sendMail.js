@@ -1,6 +1,6 @@
 import { createTransport } from "nodemailer";
 import sanitizeHtml from "sanitize-html";
-import { MyError } from "../src/Errors";
+import { MyError } from "../src/errors";
 
 require("dotenv").config();
 const history = new Map();
@@ -60,7 +60,6 @@ function validate({ email, name }) {
 }
 
 module.exports = async (req, res) => {
-  console.log(req.body);
   try {
     rateLimit(req.headers["x-real-ip"], 1);
     validate(req.body);
