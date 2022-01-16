@@ -6,8 +6,8 @@ require("dotenv").config();
 const history = new Map();
 
 const transport = createTransport({
-  host: process.env.HOST,
-  port: process.env.POST,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   secure: false,
   auth: {
     user: process.env.EMAIL_ADRESS,
