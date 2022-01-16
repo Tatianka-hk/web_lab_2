@@ -3,7 +3,7 @@
   let isLoading = false;
   let resultText = "";
   const formData = {};
-  const submitHandler = async (event) => {
+  const submitHandler = async () => {
     isLoading = true;
     try {
       const response = await fetch(url, {
@@ -47,7 +47,13 @@
       placeholder="Enter yourphone number"
       bind:value={formData.tel}
     /><br />
-    <button disabled={isLoading} id="button"> Send</button>
+    <button
+      disabled={isLoading}
+      id="button"
+      on:click|preventDefault={submitHandler}
+    >
+      Send</button
+    >
     <div class="result">{resultText}</div>
   </form>
 </main>
