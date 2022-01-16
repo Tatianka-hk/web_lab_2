@@ -1,11 +1,11 @@
-import { createTransport } from 'nodemailer';
-import sanitizeHtml from 'sanitize-html';
-import { MyError } from '../src/Errors';
+import { createTransport } from "nodemailer";
+import sanitizeHtml from "sanitize-html";
+import { MyError } from "../src/Errors";
 
-require('dotenv').config();
+require("dotenv").config();
 const history = new Map();
 
-const transporter = createTransport({
+const transport = createTransport({
   host: process.env.HOST,
   port: process.env.POST,
   secure: false,
@@ -17,26 +17,25 @@ const transporter = createTransport({
 
 async function sendMail(options) {
   try {
-    await transport.sendMail(options);//&
+    await transport.sendMail(options);
     return { success: true };
   } catch (error) {
     throw MyError.MailError();
   }
 }
-const from = 'Tanya G - ${process.env.EMAIL_ADRESS}'
+const from = "Tanya G - ${process.env.EMAIL_ADRESS}";
 async function formSubmit(formData) {
-  let html = '';
+  let html = "";
   for (const option in formData) {
-    html += option + ' : ' + formData[option] + '<br/>';
+    html += option + " : " + formData[option] + "<br/>";
   }
   return sendMail({
     from,
     to: process.env.EMAIL_TO_USER,
-    subject: 'New form submision',
+    subject: "New form submision",
     html: sanitizeHtml(html),
   });
 }
-
 
 const rateLimit = (ip, limit) => {
   const count = history.get(ip) || 0;
@@ -63,7 +62,7 @@ function validate({ email, name }) {
 module.exports = async (req, res) => {
   console.log(req.body);
   try {
-    rateLimit(req.headers['x-real-ip'], 1);
+    rateLimit(req.headers["x-real-ip"], 1);
     validate(req.body);
     const result = await formSubmit(req.body);
     return res.json({ result });
@@ -77,4 +76,3 @@ module.exports = async (req, res) => {
     });
   }
 };
-
